@@ -1,4 +1,4 @@
-﻿class CommentBox extends React.Component {
+class CommentBox extends React.Component {
 	state = { data: this.props.initialData };
 
 	loadCommentsFromServer = () => {

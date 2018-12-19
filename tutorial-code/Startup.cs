@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,7 +43,7 @@ namespace ReactDemo
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
 		{
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
@@ -68,6 +68,7 @@ namespace ReactDemo
 				config
 				  .AddScript("~/js/remarkable.min.js")
 				  .AddScript("~/js/tutorial.jsx")
+				  .AddScript("~/js/details.jsx")
 				  .SetJsonSerializerSettings(new JsonSerializerSettings
 					{
 						StringEscapeHandling = StringEscapeHandling.EscapeHtml,
@@ -91,6 +92,14 @@ namespace ReactDemo
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}");
 			});
+			REngineClass.Initialise();
+			applicationLifetime.ApplicationStopping.Register(OnShutDown);
+		}
+
+		//not yet sure if this method is being called.
+		private void OnShutDown()
+		{
+			REngineClass.DestroyEngine();
 		}
 	}
 }
